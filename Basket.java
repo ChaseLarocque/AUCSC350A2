@@ -1,57 +1,42 @@
 package dinersandthinkers;
 
-public class Basket{
+public class Basket {
 
-    private int numberOfForks;
-    private int numberOfBibs;
+    private int numberOfResources;
+    private String items;
+    public final Object lock1 = new Object();
 
-    Basket(int numberOfForks, int numberOfBibs){
-        this.numberOfBibs = numberOfBibs;
-        this.numberOfForks = numberOfForks;
-    }
 
-    int pickupFork(String profName){
-        System.out.println("=== Prof " + profName + "Is waiting for fork.");
-            synchronized (this){
-                long endTime = System.currentTimeMillis() + 10000; //wait 10 seconds
-                while ((System.currentTimeMillis() < endTime)){
-                    if(numberOfForks > 0 ){
-                        System.out.println("=== Prof " + profName + " received fork.");
-                        numberOfForks--;
-                        return 1;
-                    }//if
-                }//while
-            }//synchronized
-        return -1;
-    }
+    Basket(String items, int numberOfResources) {
+        this.numberOfResources = numberOfResources;
+        this.items = items;
+    }//constructor
 
-    int pickupBib(String profName){
-        System.out.println("=== Prof " + profName + "Is waiting for Bib");
-        synchronized (this){
-            long endTime = System.currentTimeMillis() + 10000;
-            while ((System.currentTimeMillis() < endTime)){
-                if(numberOfBibs > 0 ){
-                    System.out.println("=== Prof " + profName + " received bib.");
-                    numberOfBibs--;
-                    return 1;
-                }//if
-            }//while
+    boolean pickupResource(String profName) {
+        synchronized (lock1) {
+            if (numberOfResources > 0) {
+                System.out.println("=== Prof " + profName + " received " + items +".");
+                numberOfResources--;
+                return true;
+            } else {
+                System.out.println("=== Prof " + profName + " is waiting on " + items + ".");
+                try {
+                    lock1.notifyAll();
+                    lock1.wait(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }//catch
+                return false;
+            }//else
         }//synchronized
-        return -1;
-    }
+    }//pickupFork
 
-    void putBackFork(String profName){
-        System.out.println("Prof " + profName + "Returned Fork.");
-        synchronized (this){
-            numberOfForks++;
-        }
-    }
+    void putBackResource(String profName){
+        System.out.println("=== Prof " + profName + " Returned " + items + ". ");
+        synchronized (lock1){
+            numberOfResources++;
+            lock1.notifyAll();
+        }//synchronized
+    }//putBackFork
 
-    void putBackBib(String profName){
-        System.out.println("Prof " + profName + "Returned Bib.");
-        synchronized (this){
-            numberOfForks++;
-        }
-    }
-
-}
+}//class

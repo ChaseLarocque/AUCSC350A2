@@ -12,6 +12,8 @@ public class DinersAndThinkers {
         System.out.println("Enter Number of Profs:");
         int numberOfProfs = userInput.nextInt();
         String[] profNames = new String[numberOfProfs];
+        Profs[] profThreads = new Profs[numberOfProfs];
+
 
         for(int i = 1; i <= numberOfProfs; i++){
             System.out.println("Enter Name For Prof " + i + ":" );
@@ -23,8 +25,21 @@ public class DinersAndThinkers {
         System.out.println("Enter Number Of Forks:");
         int numberOfForks = userInput.nextInt();
 
-        //for loops to create profs
-        //for loops to join for profs to finish
+        Basket basketOfBibs = new Basket("Bibs", numberOfBibs);
+        Basket basketOfForks = new Basket ("Forks", numberOfForks);
+
+
+        for(int i = 0; i < numberOfProfs; i++){
+            profThreads[i] = new Profs(profNames[i], basketOfBibs, basketOfForks);
+            profThreads[i].start();
+        }//for
+
+        for(int i = 0; i < profThreads.length; i++) {
+            try {
+                profThreads[i].join();
+            } catch (Exception e) {
+            }
+        }
 
     }
 }
