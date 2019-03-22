@@ -88,8 +88,8 @@ public class Basket {
         System.out.println("=== Prof " + profName + " Returned " + items + ". ");
         synchronized (lock1){
             numberOfResources++;
-            lock1.notifyAll();
+            lock1.notifyAll(); //tell other threads that the resource is available
         }//synchronized
     }//putBackFork
 
-}//class
+}//Basket.java

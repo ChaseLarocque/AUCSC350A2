@@ -1,4 +1,5 @@
 package dinersandthinkers;
+
 import java.util.Random;
 
 /**
@@ -34,8 +35,8 @@ public class Profs extends Thread{
     String profName;
     final int TOTAL_LINES = 200;
     final int TOTAL_NOODLES = 85;
-    int numberOfLinesLeft = 200;
-    int numberOfNoodlesLeft = 85;
+    int numberOfLinesLeft = TOTAL_LINES;
+    int numberOfNoodlesLeft = TOTAL_NOODLES;
 
     /**
      * Constructor - Profs(String, Basket, Basket)
@@ -169,7 +170,7 @@ public class Profs extends Thread{
                                     basketOfBibs.putBackResource(profName);
                                     break;
                             }//switch
-                            return;
+                            return; //finish eating stage after eating
                         } else {
                             basketOfBibs.putBackResource(profName);
                             break; //break out of case
@@ -197,7 +198,7 @@ public class Profs extends Thread{
                                     basketOfBibs.putBackResource(profName);
                                     break;
                             }//switch
-                            return;
+                            return; //finish eating stage after eating
                         } else {
                             basketOfForks.putBackResource(profName);
                             break; //break out of case

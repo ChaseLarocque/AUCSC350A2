@@ -47,9 +47,9 @@ public class DinersAndThinkers {
         Profs[] profThreads = new Profs[numberOfProfs];
 
 
-        for(int i = 1; i <= numberOfProfs; i++){
-            System.out.println("Enter Name For Prof " + i + ":" );
-            profNames[i - 1] = userInput.next();
+        for(int i = 0; i < numberOfProfs; i++){
+            System.out.println("Enter Name For Prof " + (i + 1) + ":" );
+            profNames[i] = userInput.next();
         }//for
 
         System.out.println("Enter Number Of Bibs:");
