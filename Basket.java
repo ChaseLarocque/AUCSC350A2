@@ -15,7 +15,8 @@ package dinersandthinkers;
  *
  * - pickupResource(String)
  *   Function will check to see if current prof can pickup the resource, if not
- *   prof will wait() and notifyall() so another prof may grab it.
+ *   prof will wait() and try again. If the second attempt is unsuccessful,
+ *   prof will give up.
  *
  * - putBackResource(String)
  *   Function will put the resource by incrementing the number of
@@ -26,7 +27,7 @@ package dinersandthinkers;
 public class Basket {
 
     private int numberOfResources;
-    private String items;
+    private final String items;
     public final Object lock1 = new Object();
 
     /**
@@ -41,36 +42,38 @@ public class Basket {
         this.items = items;
     }//constructor
 
+
     /**
      * pickupResource(String)
      * @param profName
      * @return
      *
      * Function checks to see if there is any available resources and if so,
-     * decrements the number of resources available. If no resources available, give up
-     * lock and notify other threads so the program keeps moving and the other
-     * threads have a chance to grab the resource.
+     * decrements the number of resources available. If no resources available, wait for
+     * at most 2 seconds, or until a notify() call wakes up the function and checks
+     * to see if it can grab the resource again. if not, return false. If the function
+     * can grab the resource, return true.
      */
     boolean pickupResource(String profName) {
         synchronized (lock1) {
-            //if resource available, claim it
             if (numberOfResources > 0) {
-                System.out.println("=== Prof " + profName + " received " + items +".");
+                System.out.println("=== Prof " + profName + " received " + items + ".");
                 numberOfResources--;
                 return true;
             } else {
                 System.out.println("=== Prof " + profName + " is waiting on " + items + ".");
                 try {
-                    //if resource is not available, release the lock with wait() and
-                    //notify any other thread waiting so that another thread gets the opportunity
-                    //to try before this thread (also keeps the program moving).
-                    //(wait keeps the program from writing "prof is waiting on resource" a lot)
-                    lock1.notifyAll();
-                    lock1.wait(10000); //RELEASE LOCK
+                    lock1.wait(2000); //wait for maximum of 2 seconds
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }//catch
-                return false;
+                if(numberOfResources > 0){
+                    System.out.println("=== Prof " + profName + " received " + items + ".");
+                    numberOfResources--;
+                    return true;
+                }else{
+                    return false;
+                }//else
             }//else
         }//synchronized
     }//pickupFork
@@ -88,8 +91,7 @@ public class Basket {
         System.out.println("=== Prof " + profName + " Returned " + items + ". ");
         synchronized (lock1){
             numberOfResources++;
-            lock1.notifyAll(); //tell other threads that the resource is available
+            lock1.notify();
         }//synchronized
     }//putBackFork
-
 }//Basket.java

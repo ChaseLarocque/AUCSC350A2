@@ -171,6 +171,7 @@ public class Profs extends Thread{
                                     break;
                             }//switch
                             return; //finish eating stage after eating
+                        //else happens if prof can't grab second item after grabbing first
                         } else {
                             basketOfBibs.putBackResource(profName);
                             break; //break out of case
