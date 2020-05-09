@@ -1,4 +1,4 @@
-# Assignment 3 For AUCSC350
+# Diners and Thinkers For AUCSC350
 ### AUCSC 350 - Organization and Architecture II At the University of Alberta, Augustana Campus. 
 
 Assignment handles the classic Diners and Philosophers problem, extending it to Professors, Resources and Coding. 
