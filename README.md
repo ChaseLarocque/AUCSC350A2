@@ -4,4 +4,4 @@
 Assignment handles the classic Diners and Philosophers problem, extending it to Professors, Resources and Coding. 
 Code is written in Java and uses Java Threads to handle parallelism. 
 
-*Code written by Chase Larocque & Justin Ikenouye. 
+*Code written by Chase Larocque & Justin Ikenouye.*
